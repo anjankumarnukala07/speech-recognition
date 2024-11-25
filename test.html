@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech Recognition</title>
+</head>
+<body>
+    <h1>Webkit Speech Recognition</h1>
+    <button id="start">Start Listening</button>
+    <p><strong>Recognized Text:</strong> <span id="output"></span></p>
+
+    <script>
+        // Check if the browser supports Speech Recognition
+        if ('webkitSpeechRecognition' in window) {
+            const recognition = new webkitSpeechRecognition();
+            recognition.lang = 'en-US'; // Set language
+            recognition.continuous = false; // Stop after one phrase
+            recognition.interimResults = false; // Return final results
+
+            const startButton = document.getElementById('start');
+            const output = document.getElementById('output');
+
+            // Start recognition on button click
+            startButton.addEventListener('click', () => {
+                recognition.start();
+                output.textContent = "Listening...";
+            });
+
+            // Handle recognition results
+            recognition.onresult = (event) => {
+                output.textContent = event.results[0][0].transcript;
+            };
+
+            // Handle recognition errors
+            recognition.onerror = (event) => {
+                output.textContent = `Error: ${event.error}`;
+            };
+
+            // Handle recognition end
+            recognition.onend = () => {
+                console.log('Speech recognition ended.');
+            };
+        } else {
+            alert('Speech Recognition not supported on this device.');
+        }
+    </script>
+</body>
+</html>
